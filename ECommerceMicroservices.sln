@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0F586863-2CB6-4815-A784-05002571D8AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{5E4E9909-42BD-409B-BA4D-1BD2CD684BFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.API", "Services\Catalog\Catalog.API\Catalog.API.csproj", "{9473D209-34BF-4CB8-B8E6-F3F12B07060E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FA95B0C8-3C3C-417A-A21E-9D9DA37C252E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared\Shared.csproj", "{F963EA61-B97F-4FA7-8728-BF6678A59294}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9473D209-34BF-4CB8-B8E6-F3F12B07060E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9473D209-34BF-4CB8-B8E6-F3F12B07060E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9473D209-34BF-4CB8-B8E6-F3F12B07060E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9473D209-34BF-4CB8-B8E6-F3F12B07060E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F963EA61-B97F-4FA7-8728-BF6678A59294}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F963EA61-B97F-4FA7-8728-BF6678A59294}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F963EA61-B97F-4FA7-8728-BF6678A59294}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F963EA61-B97F-4FA7-8728-BF6678A59294}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5E4E9909-42BD-409B-BA4D-1BD2CD684BFA} = {0F586863-2CB6-4815-A784-05002571D8AA}
+		{9473D209-34BF-4CB8-B8E6-F3F12B07060E} = {5E4E9909-42BD-409B-BA4D-1BD2CD684BFA}
+		{FA95B0C8-3C3C-417A-A21E-9D9DA37C252E} = {0F586863-2CB6-4815-A784-05002571D8AA}
+		{F963EA61-B97F-4FA7-8728-BF6678A59294} = {FA95B0C8-3C3C-417A-A21E-9D9DA37C252E}
+	EndGlobalSection
+EndGlobal
