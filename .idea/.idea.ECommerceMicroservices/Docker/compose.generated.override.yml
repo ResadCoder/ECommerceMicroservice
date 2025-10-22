@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.9"
+services:
+  catalog.api:
+    build:
+      context: "/Users/resadsadiqov/Desktop/ECommerceMicroservices"
+      dockerfile: "Services/Catalog/Catalog.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Catalog.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "catalog.api:dev"
+    ports: []
+    volumes:
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices/Services/Catalog/Catalog.API:/app:rw"
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices:/src:rw"
+    - "/Users/resadsadiqov/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"
