@@ -1,7 +1,18 @@
-using Catalog.API.DTOs.Products.Create.Endpoint;
-using Catalog.API.DTOs.Products.Create.Handler;
-
 namespace Catalog.API.Products.CreateProduct;
+
+public record CreateProductResponseDto
+(
+    Guid Id
+);
+
+public record CreateProductRequestDto
+(
+    string Name,
+    List<string> Categories,
+    string Description,
+    string ImageUrl,
+    decimal Price
+);
 
 public class CreateProductEndpoint : ICarterModule
 {

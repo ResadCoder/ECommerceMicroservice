@@ -1,5 +1,6 @@
 using Catalog.API.Exceptions;
 using Catalog.API.Models;
+using FluentValidation;
 using Marten;
 using Shared.CQRS;
 
@@ -8,7 +9,25 @@ namespace Catalog.API.Products.UpdateProduct;
 public record UpdateProductCommand(Guid Id, string Name, decimal Price, List<string> Categories)
     : ICommand<UpdateProductResult>;
         
-public record UpdateProductResult(bool Success, string Message);        
+public record UpdateProductResult(bool Success, string Message);
+
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty().WithMessage("Id is required");
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("Name is required")
+            .MaximumLength(50).WithMessage("Name must not exceed 50 characters");
+        RuleFor(x => x.Price)
+            .NotEmpty().WithMessage("Price is required")
+            .GreaterThan(0).WithMessage("Price must be greater than 0");
+        RuleFor(x => x.Categories)
+            .NotEmpty()
+            .WithMessage("Categories is required");
+    }
+}
 
 public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProductHandler> logger): ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
