@@ -1,10 +1,11 @@
 using Catalog.API.DTOs.Products.Create.Handler;
 using Catalog.API.Models;
+using Marten;
 using Shared.CQRS;
 
 namespace Catalog.API.Products.CreateProduct;
 
-internal class CreateProductCommandHandler : ICommandHandler<CreateProductCommandDto,CreateProductResultDto>
+internal class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommandDto,CreateProductResultDto>
 {
     public async Task<CreateProductResultDto> Handle(CreateProductCommandDto command, CancellationToken cancellationToken)
     {
@@ -16,7 +17,10 @@ internal class CreateProductCommandHandler : ICommandHandler<CreateProductComman
             Price = command.Price,
             ImageUrl = command.ImageUrl
         };
+        
+        session.Store(product);
+        await session.SaveChangesAsync(cancellationToken);
 
-        return new CreateProductResultDto(Guid.NewGuid());
+        return new CreateProductResultDto(product.Id);
     }
 }
