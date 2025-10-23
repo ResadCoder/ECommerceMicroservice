@@ -3,3 +3,8 @@ global using MediatR;
 global using Carter;
 global using FluentValidation;
 global using Marten;
+global using Catalog.API.Data;
+global using Shared.Behaviors;
+global using Shared.Exceptions.Handler;
+global using Marten.Pagination;
+global using Shared.CQRS;
