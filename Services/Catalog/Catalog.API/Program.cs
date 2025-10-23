@@ -1,11 +1,8 @@
-using Catalog.API.Products.CreateProduct;
-using FluentValidation;
-using Marten;
 using Shared.Behaviors;
+using Shared.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 
 var assembly = typeof(Program).Assembly;
 
@@ -14,6 +11,7 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 builder.Services.AddMarten(opt =>
@@ -23,10 +21,13 @@ builder.Services.AddMarten(opt =>
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-
 app.MapCarter();
+
+app.UseExceptionHandler(options => { });
 
 app.Run();
