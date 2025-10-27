@@ -1,84 +1,4 @@
-﻿#version: '3.9'
-#
-#services:
-#  catalog.api:
-#    container_name: catalog.api
-#    image: catalog.api
-#    build:
-#      context: .
-#      dockerfile: Services/Catalog/Catalog.API/Dockerfile
-#    ports:
-#      - "8001:8000"
-#    depends_on:
-#      - catalogdb
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres
-#  
-#  catalogdb:
-#    container_name: catalogdb
-#    image: postgres:15   # <<--- this line is required
-#    restart: always
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - POSTGRES_DB=CatalogDb
-#    ports:
-#      - "5433:5432"
-#    volumes:
-#      - catalog_data:/var/lib/postgresql/data
-#
-#
-#volumes:
-#  catalog_data:
-#  catalog.api-1:
-#    image: catalog.api-1
-#    build:
-#      context: .
-#      dockerfile: Services/Catalog/Catalog.API/Dockerfile
-#
-#version: '3.9'
-#
-#services:
-#  catalog.api:
-#    container_name: catalog.api
-#    image: catalog.api
-#    build:
-#      context: .
-#      dockerfile: Services/Catalog/Catalog.API/Dockerfile
-#    ports:
-#      - "6060:8000"
-#      - "6060:8001"
-#    depends_on:
-#      - catalogdb
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres
-#    networks:
-#      - catalog-network
-#
-#  catalogdb:
-#    container_name: catalogdb
-#    image: postgres:15
-#    restart: always
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - POSTGRES_DB=CatalogDb
-#    ports:
-#      - "5433:5432"
-#    volumes:
-#      - catalog_data:/var/lib/postgresql/data
-#    networks:
-#      - catalog-network
-#
-#volumes:
-#  catalog_data:
-#
-#networks:
-#  catalog-network:
-#    driver: bridge
-version: '3.9'
+﻿version: '3.9'
 
 services:
   catalog.api:
@@ -88,15 +8,15 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
     ports:
-      - "6060:8000" # main API
-      - "6000:8001" # secondary port (e.g., health checks, gRPC)
+      - "6060:8000"
+      - "6000:8001"
     depends_on:
       - catalogdb
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres
     networks:
-      - catalog-network
+      - microservices-network
 
   catalogdb:
     container_name: catalogdb
@@ -107,15 +27,49 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=CatalogDb
     ports:
-      - "5433:5432"
+      - "5433:5432" # host:container
     volumes:
       - catalog_data:/var/lib/postgresql/data
     networks:
-      - catalog-network
+      - microservices-network
+
+  basket.api:
+    container_name: basket.api
+    image: basket.api
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
+    ports:
+      - "7070:8000"
+    depends_on:
+      - basketdb
+      - catalog.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres
+      - CatalogApi__Url=http://catalog.api:8000
+    networks:
+      - microservices-network
+
+  basketdb:
+    container_name: basketdb
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BasketDb
+    ports:
+      - "5434:5432" 
+    volumes:
+      - basket_data:/var/lib/postgresql/data
+    networks:
+      - microservices-network
 
 volumes:
   catalog_data:
+  basket_data:
 
 networks:
-  catalog-network:
+  microservices-network:
     driver: bridge

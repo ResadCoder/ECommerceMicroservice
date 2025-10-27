@@ -1,6 +1,24 @@
 # This is a generated file. Not intended for manual editing.
 version: "3.9"
 services:
+  basket.api:
+    build:
+      context: "/Users/resadsadiqov/Desktop/ECommerceMicroservices"
+      dockerfile: "Services/Basket/Basket.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Basket.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "basket.api:dev"
+    ports: []
+    volumes:
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices/Services/Basket/Basket.API:/app:rw"
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices:/src:rw"
+    - "/Users/resadsadiqov/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"
   catalog.api:
     build:
       context: "/Users/resadsadiqov/Desktop/ECommerceMicroservices"
