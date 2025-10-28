@@ -8,8 +8,8 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
     ports:
-      - "6060:8000"  # API port
-      - "6000:8001"  # Swagger or other dev port
+      - "6060:8000"
+      - "6000:8001"
     depends_on:
       - catalogdb
     environment:
@@ -27,7 +27,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=CatalogDb
     ports:
-      - "5433:5432"  # host:container
+      - "5433:5432"
     volumes:
       - catalog_data:/var/lib/postgresql/data
     networks:
@@ -45,11 +45,13 @@ services:
       - basketdb
       - catalog.api
       - redis
+      - discount.grpc   # basket may later call discount service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres
-      - ConnectionStrings__Redis=redis:6379  # Keep as Docker hostname
+      - ConnectionStrings__Redis=redis:6379
       - CatalogApi__Url=http://catalog.api:8000
+      - DiscountGrpc__Url=http://discount.grpc:8000
     networks:
       - microservices-network
 
@@ -73,9 +75,26 @@ services:
     image: redis:7
     restart: always
     ports:
-      - "6379:6379"   
+      - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - microservices-network
+
+  # 🆕 Discount gRPC Service
+  discount.grpc:
+    container_name: discount.grpc
+    image: discount.grpc:dev
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.gRPC/Dockerfile
+    ports:
+      - "5002:8000"  # match launchSettings.json
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Data Source=/app/discount.db
+    volumes:
+      - discount_data:/app
     networks:
       - microservices-network
 
@@ -83,6 +102,7 @@ volumes:
   catalog_data:
   basket_data:
   redis_data:
+  discount_data:
 
 networks:
   microservices-network:
