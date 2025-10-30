@@ -37,3 +37,39 @@ services:
     - "/Users/resadsadiqov/Desktop/ECommerceMicroservices:/src:rw"
     - "/Users/resadsadiqov/.nuget/packages:/home/app/.nuget/packages"
     working_dir: "/app"
+  discount.grpc:
+    build:
+      context: "/Users/resadsadiqov/Desktop/ECommerceMicroservices"
+      dockerfile: "Services/Discount/Discount.gRPC/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app-1/bin/Debug/net9.0/Discount.gRPC.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "discount.grpc:dev"
+    ports: []
+    volumes:
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices/Services/Discount/Discount.gRPC:/app-1:rw"
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices:/src:rw"
+    - "/Users/resadsadiqov/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app-1"
+  order.api:
+    build:
+      context: "/Users/resadsadiqov/Desktop/ECommerceMicroservices"
+      dockerfile: "Services/Ordering/Ordering.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Ordering.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "order.api:dev"
+    ports: []
+    volumes:
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices/Services/Ordering/Ordering.API:/app:rw"
+    - "/Users/resadsadiqov/Desktop/ECommerceMicroservices:/src:rw"
+    - "/Users/resadsadiqov/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"

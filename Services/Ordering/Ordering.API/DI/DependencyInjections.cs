@@ -5,6 +5,7 @@ public static class DependencyInjections
     public static IServiceCollection AddApiServices
         (this IServiceCollection services)
     {
+        
         return services;
     }
 
