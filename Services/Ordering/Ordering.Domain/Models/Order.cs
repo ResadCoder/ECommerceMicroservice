@@ -26,10 +26,9 @@ public class Order : Aggregate<OrderId>
         private set { }
     }
 
-    public static Order Create(OrderId orderId, ProductId productId,
-        CustomerId customerId, OrderName orderName, Address billingAddress,
-        Address shippingAddress, Payment payment
-        )
+    public static Order Create(OrderId orderId, ProductId productId, CustomerId customerId,
+        OrderName orderName, Address billingAddress,
+        Address shippingAddress, Payment payment)
     {
         var order = new Order
         {

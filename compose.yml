@@ -46,12 +46,21 @@ services:
       - catalog.api
       - redis
       - discount.grpc
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres
       - ConnectionStrings__Redis=redis:6379
       - CatalogApi__Url=http://catalog.api:8000
       - DiscountGrpc__Url=http://discount.grpc:8000
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
+
+      # SAFE: Secret-lər .env faylından gəlir
+      - ServiceBus__NamespaceConnection=${SERVICEBUS_NAMESPACE}
+      - ServiceBus__QueueConnection=${SERVICEBUS_QUEUE
+
     networks:
       - microservices-network
 
@@ -97,7 +106,6 @@ services:
     networks:
       - microservices-network
 
-  # 🆕 Order API + MSSQL Database
   order.api:
     container_name: order.api
     image: order.api:dev
@@ -108,9 +116,13 @@ services:
       - "8080:8000"
     depends_on:
       - orderdb
+      - rabbitmq
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=8Ncn2004RE;Encrypt=False;TrustServerCertificate=True
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest
     networks:
       - microservices-network
 
@@ -125,6 +137,19 @@ services:
       - "1433:1433"
     volumes:
       - order_data:/var/opt/mssql
+    networks:
+      - microservices-network
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     networks:
       - microservices-network
 
